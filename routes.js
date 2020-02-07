@@ -46,17 +46,20 @@ router.get('/items', async(req, res, next) => {
 })
 
 router.get('/user', async(req, res, next) => {
-    const user = req.user;
-    // console.log(req);
     // req.query.username // put this into DB call
     // req.query.password // put this into DB call
-    const pool = await poolPromise;
+    console.log(req)
+;    const pool = await poolPromise;
     const query = await pool.request()
-            .input('Username', sql.VarChar(20), req.body.username)
-            .input('Password', sql.VarChar(25), req.body.password)
+            .input('Username', sql.VarChar(20), req.query.username)
+            .input('UserPassword', sql.VarChar(25), req.query.password)
+            .execute('CheckLogin');
+    console.log(query);
     if (query.returnValue == 1 ) {
+        console.log(query.returnValue)
         res.end(JSON.stringify({ success: true, items: query.recordset }))
     } else {
+        console.log(query.returnValue)
         res.end(JSON.stringify({ success: false, result: 'Empty'}))
     }
 })
