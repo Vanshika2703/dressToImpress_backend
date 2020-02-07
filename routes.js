@@ -26,13 +26,13 @@ router.post('/item', async (req, res, next) => {
     const pool = await poolPromise;
     const query = await pool.request()
                         .input('Color', sql.VarChar(20), req.body.Color)
-                        .input('ItemType', sql.VarChar(50), req.body.itemType)
+                        .input('ItemType', sql.VarChar(50), req.body.ItemType)
                         .input('Name', sql.VarChar(50), req.body.Name)
                         .input('Category', sql.VarChar(30), req.body.Category)
-                        .input('Cost', sql.money, req.body.Cost)
+                        .input('Cost', sql.Money, req.body.Cost)
                         .input('Description', sql.VarChar(80), req.body.Description)
-                        .input('Display', sql.VarChar(MAX), req.body.Display)
-                        .input('Quantity', sql.int, req.body.Quantity)
+                        .input('Display', sql.VarChar(1000), req.body.Display)
+                        .input('Quantity', sql.Int, req.body.Quantity)
                         .execute('insert_Item');
      if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true, items: query.recordset }))
