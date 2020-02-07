@@ -21,6 +21,26 @@ router.post('/user', async (req, res, next) => {
     }
 });
 
+router.post('/item', async (req, res, next) => {
+    console.log('Item is being inserted')
+    const pool = await poolPromise;
+    const query = await pool.request()
+                        .input('Color', sql.VarChar(20), req.body.Color)
+                        .input('ItemType', sql.VarChar(50), req.body.ItemType)
+                        .input('Name', sql.VarChar(50), req.body.Name)
+                        .input('Category', sql.VarChar(30), req.body.Category)
+                        .input('Cost', sql.money, req.body.Cost)
+                        .input('Description', sql.VarChar(80), req.body.Description)
+                        .input('Display', sql.VarChar(MAX), req.body.Display)
+                        .input('Quantity', sql.int, req.body.Quantity)
+                        .execute('insert_Item');
+     if (query.returnValue = 0) {
+        res.end(JSON.stringify({ success: true, items: query.recordset }))
+     } else {
+        res.end(JSON.stringify({ success: false, result: 'Empty'}))
+    }
+});
+
 router.get('/items', async(req, res, next) => {
     const pool = await poolPromise;
     const query = await pool.request()
