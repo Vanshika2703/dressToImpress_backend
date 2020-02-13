@@ -13,6 +13,10 @@ router.post('/user', async (req, res, next) => {
                         .input('Fname', sql.VarChar(20), req.body.fname)
                         .input('Lname', sql.VarChar(30), req.body.lname)
                         .input('DOB', sql.Date, req.body.dob)
+                        .input('Number',sql.Int,req.body.number)
+                        .input('Street',sql.VarChar(60),req.body.street)
+                        .input('AddrState',sql.VarChar(2),req.body.state)
+                        .input('Zipcode',sql.Int,req.body.zip)
                         .execute('insert_User');
      if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true, items: query.recordset }))
@@ -29,7 +33,7 @@ router.post('/item', async (req, res, next) => {
                         .input('ItemType', sql.VarChar(50), req.body.ItemType)
                         .input('Name', sql.VarChar(50), req.body.Name)
                         .input('Category', sql.VarChar(30), req.body.Category)
-                        .input('Cost', sql.Money, req.body.Cost)
+                        .input('Cost', sql.Money, rcdeq.body.Cost)
                         .input('Description', sql.VarChar(80), req.body.Description)
                         .input('Display', sql.VarChar(1000), req.body.Display)
                         .input('Quantity', sql.Int, req.body.Quantity)
