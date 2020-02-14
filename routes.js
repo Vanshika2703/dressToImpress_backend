@@ -15,6 +15,7 @@ router.post('/user', async (req, res, next) => {
                         .input('DOB', sql.Date, req.body.dob)
                         .input('Number',sql.Int,req.body.number)
                         .input('Street',sql.VarChar(60),req.body.street)
+                        .input('City', sql.VarChar(30), req.body.city)
                         .input('AddrState',sql.VarChar(2),req.body.state)
                         .input('Zipcode',sql.Int,req.body.zip)
                         .execute('insert_User');
@@ -66,6 +67,28 @@ router.get('/items', async(req, res, next) => {
 //         res.end(JSON.stringify({ success: false, result: 'Empty'}))
 //     }
 // })
+
+router.post('/order', async (req, res, next) => {
+    console.log('Order is being placed')
+    const pool = await poolPromise;
+    const query = await pool.request()
+                        .input('Username', sql.VarChar(20), req.body.username)
+                        .input('Date', sql.DateTime, req.body.date)
+                        .input('ItemID', sql.Int, req.body.itemid)
+                        .execute('insert_Order');
+    if (query.returnValue == 0) 
+    {
+        res.end(JSON.stringify({ success: true, items: query.recordset, number: 1}))
+    } 
+    else if (query.returnValue == 1)
+    {
+        res.end(JSON.stringify({ success: false, result: 'Empty', number: 1}))
+    }
+    else if (query.returnValue == 2)
+    {
+        res.end(JSON.stringify({ success: false, result: 'Empty', number: 2}))
+    }
+});
 
 router.get('/user', async(req, res, next) => {
     // req.query.username // put this into DB call
