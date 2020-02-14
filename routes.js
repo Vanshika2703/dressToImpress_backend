@@ -99,11 +99,12 @@ router.get('/user', async(req, res, next) => {
             .input('Username', sql.VarChar(20), req.query.username)
             .input('UserPassword', sql.VarChar(25), req.query.password)
             .execute('CheckLogin');
+            
     console.log(query);
     if (query.returnValue == 1 ) 
     {
         console.log(query.returnValue)
-        res.end(JSON.stringify({ success: true, items: query.recordset, number: 1 }))
+        res.end(JSON.stringify({ success: true, number: 1, username: req.query.username }))
     } 
     else if (query.returnValue == 2)
     {
