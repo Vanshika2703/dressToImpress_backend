@@ -79,12 +79,20 @@ router.get('/user', async(req, res, next) => {
             .input('UserPassword', sql.VarChar(25), req.query.password)
             .execute('CheckLogin');
     console.log(query);
-    if (query.returnValue == 1 ) {
+    if (query.returnValue == 1 ) 
+    {
         console.log(query.returnValue)
-        res.end(JSON.stringify({ success: true, items: query.recordset }))
-    } else {
+        res.end(JSON.stringify({ success: true, items: query.recordset, number: 1 }))
+    } 
+    else if (query.returnValue == 2)
+    {
         console.log(query.returnValue)
-        res.end(JSON.stringify({ success: false, result: 'Empty'}))
+        res.end(JSON.stringify({ success: true, items: query.recordset, number: 2 }))
+    }
+    else 
+    {
+        console.log(query.returnValue)
+        res.end(JSON.stringify({ success: false, result: 'Empty', number: 0}))
     }
 })
 module.exports = router;
