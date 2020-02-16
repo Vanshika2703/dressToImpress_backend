@@ -63,7 +63,7 @@ router.get('/itemsSorted', async(req, res, next) => {
         .input('Color', sql.VarChar(20), req.body.Color)
         .input('ItemType', sql.VarChar(50), req.body.ItemType)
         .input('Cost', sql.Money, rcdeq.body.Cost)
-        .execute('getItemSorted');
+        .execute('getItemsorted');
         if (query.returnValue == 0) 
         {
             res.end(JSON.stringify({ success: true, items: query.recordset}))
