@@ -56,6 +56,24 @@ router.get('/items', async(req, res, next) => {
     }
 })
 
+
+router.get('/itemsSorted', async(req, res, next) => {
+    const pool = await poolPromise;
+    const query = await pool.request()
+        .input('Color', sql.VarChar(20), req.body.Color)
+        .input('ItemType', sql.VarChar(50), req.body.ItemType)
+        .input('Cost', sql.Money, rcdeq.body.Cost)
+        .execute('getItemSorted');
+        if (query.returnValue == 0) 
+        {
+            res.end(JSON.stringify({ success: true, items: query.recordset}))
+        } 
+        else if (query.returnValue == 1)
+        {
+            res.end(JSON.stringify({ success: false, result: 'Empty'}))
+        }
+}) 
+
 // router.get('/items', async(req, res, next) => {
 //     const pool = await poolPromise;
 //     const query = await pool.request()
