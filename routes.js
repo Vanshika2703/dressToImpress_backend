@@ -18,11 +18,18 @@ router.post('/user', async (req, res, next) => {
                         .input('City', sql.VarChar(30), req.body.city)
                         .input('AddrState',sql.VarChar(2),req.body.state)
                         .input('Zipcode',sql.Int,req.body.zip)
+                        .input('CardNumber',sql.Int,req.body.cardnumber)
+                        .input('ExpiryDate',sql.Date,req.body.expirydate)
+
                         .execute('insert_User');
      if (query.returnValue == 0) {
-        res.end(JSON.stringify({ success: true, items: query.recordset }))
-     } else {
-        res.end(JSON.stringify({ success: false, result: 'Empty'}))
+        res.end(JSON.stringify({ success: true,  number: 0}))
+     } else if (query.returnValue == 1){
+        res.end(JSON.stringify({ success: false, number: 1}))
+    }
+    else if (query.returnValue == 2)
+    {
+        res.end(JSON.stringify({ success: false,  number: 2}))
     }
 });
 
@@ -58,6 +65,7 @@ router.get('/items', async(req, res, next) => {
 
 
 router.get('/itemsSorted', async(req, res, next) => {
+    console.log("im inside!");
     const pool = await poolPromise;
     const query = await pool.request()
         .input('Color', sql.VarChar(20), req.body.Color)
