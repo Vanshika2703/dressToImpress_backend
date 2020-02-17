@@ -88,7 +88,7 @@ router.post('/order', async (req, res, next) => {
     const query = await pool.request()
                         .input('Username', sql.VarChar(20), req.body.username)
                         .input('Date', sql.DateTime, req.body.date)
-                        .input('ItemID', sql.Int, req.body.itemid)
+                        .input('ItemID', sql.Int, req.body.id)
                         .execute('insert_Order');
     if (query.returnValue == 0) 
     {
