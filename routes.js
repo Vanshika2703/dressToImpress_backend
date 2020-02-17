@@ -33,7 +33,7 @@ router.post('/item', async (req, res, next) => {
                         .input('Color', sql.VarChar(20), req.body.Color)
                         .input('ItemType', sql.VarChar(50), req.body.ItemType)
                         .input('Name', sql.VarChar(50), req.body.Name)
-                        .input('Cost', sql.Money, rcdeq.body.Cost)
+                        .input('Cost', sql.Money, req.body.Cost)
                         .input('Description', sql.VarChar(80), req.body.Description)
                         .input('Display', sql.VarChar(1000), req.body.Display)
                         .execute('insert_Item');
@@ -73,18 +73,6 @@ router.get('/itemsSorted', async(req, res, next) => {
             res.end(JSON.stringify({ success: false, result: 'Empty'}))
         }
 }) 
-
-// router.get('/items', async(req, res, next) => {
-//     const pool = await poolPromise;
-//     const query = await pool.request()
-//                         .query('SELECT * FROM [dbo].[getItems] ()');
-
-//     if (query.recordset.length > 0) {
-//         res.end(JSON.stringify({ success: true, items: query.recordset }))
-//     } else {
-//         res.end(JSON.stringify({ success: false, result: 'Empty'}))
-//     }
-// })
 
 router.post('/order', async (req, res, next) => {
     console.log('Order is being placed')
