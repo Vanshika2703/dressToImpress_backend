@@ -94,8 +94,7 @@ router.post('/order', async (req, res, next) => {
     {
         res.end(JSON.stringify({ success: true, items: query.recordset, number: 1}))
     } 
-    else if (query.returnValue == 1)
-    {
+    else if (query.returnValue == 1){
         res.end(JSON.stringify({ success: false, result: 'Empty', number: 1}))
     }
     else if (query.returnValue == 2)
