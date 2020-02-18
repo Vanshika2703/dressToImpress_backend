@@ -63,6 +63,19 @@ router.get('/items', async(req, res, next) => {
     }
 })
 
+router.get('/cart', async(req, res, next) => {
+    console.log('entering cart query');
+    console.log('req.query', req.query);
+    const pool = await poolPromise;
+    const result = await pool.request()
+                        .input('Username', sql.VarChar(20), req.query.username)
+                        .query("SELECT * FROM [dbo].[getCartItems] (@Username)");
+    if (result.recordset.length > 0) {
+        res.end(JSON.stringify({ success: true, items: result.recordset }))
+    } else {
+        res.end(JSON.stringify({ success: false, result: 'Empty'}))
+    }
+})
 
 router.get('/itemsSorted', async(req, res, next) => {
     console.log("im inside!");
@@ -100,6 +113,23 @@ router.post('/order', async (req, res, next) => {
     else if (query.returnValue == 2)
     {
         res.end(JSON.stringify({ success: false, result: 'Empty', number: 2}))
+    }
+});
+
+router.post('/cart', async (req, res, next) => {
+    console.log('Item is attemping to be placed in the cart')
+    const pool = await poolPromise;
+    const query = await pool.request()
+                        .input('Username', sql.VarChar(20), req.body.username)
+                        .input('ItemID', sql.Int, req.body.id)
+                        .execute('insert_Cart');
+    if (query.returnValue == 0) 
+    {
+        res.end(JSON.stringify({ success: true}))
+    } 
+    else if(query.returnValue == 1)
+    {
+        res.end(JSON.stringify({ success: false}))
     }
 });
 
