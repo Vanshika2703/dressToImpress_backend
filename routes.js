@@ -133,6 +133,23 @@ router.post('/cart', async (req, res, next) => {
     }
 });
 
+router.delete('/cart', async (req, res, next) => {
+    console.log('Item is attemping to be deleted from the cart')
+    const pool = await poolPromise;
+    const query = await pool.request()
+                        .input('ID', sql.Int, req.body.id)
+                        .input('Username', sql.VarChar(20), req.body.username)
+                        .execute('delete_CartItem');
+    if (query.returnValue == 0) 
+    {
+        res.end(JSON.stringify({ success: true}))
+    } 
+    else if(query.returnValue == 1)
+    {
+        res.end(JSON.stringify({ success: false}))
+    }
+});
+
 router.get('/user', async(req, res, next) => {
     // req.query.username // put this into DB call
     // req.query.password // put this into DB call
