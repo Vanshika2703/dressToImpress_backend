@@ -77,17 +77,18 @@ router.get('/cart', async(req, res, next) => {
     }
 })
 
-router.get('/itemsSorted', async(req, res, next) => {
+router.get('/item/sorted', async(req, res, next) => {
     console.log("im inside!");
     const pool = await poolPromise;
     const query = await pool.request()
-        .input('Color', sql.VarChar(20), req.body.Color)
-        .input('ItemType', sql.VarChar(50), req.body.ItemType)
-        .input('Cost', sql.Money, rcdeq.body.Cost)
+        .input('Color', sql.VarChar(20), req.query.Color)
+        .input('ItemType', sql.VarChar(50), req.query.ItemType)
+        .input('Cost', sql.Money, req.query.Cost)
         .execute('getItemsorted');
         if (query.returnValue == 0) 
         {
             res.end(JSON.stringify({ success: true, items: query.recordset}))
+            console.log(query.recordset)
         } 
         else if (query.returnValue == 1)
         {
