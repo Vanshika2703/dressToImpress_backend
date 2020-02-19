@@ -78,7 +78,6 @@ router.get('/cart', async(req, res, next) => {
 })
 
 router.get('/item/sorted', async(req, res, next) => {
-    console.log("im inside!");
     const pool = await poolPromise;
     const query = await pool.request()
         .input('Color', sql.VarChar(20), req.query.Color)
