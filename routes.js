@@ -63,6 +63,20 @@ router.get('/items', async(req, res, next) => {
     }
 })
 
+router.get('/user/profile', async(req, res, next) => {
+    console.log('entering info query');
+    console.log('req.query', req.query);
+    const pool = await poolPromise;
+    const result = await pool.request()
+                        .input('Username', sql.VarChar(20), req.query.username)
+                        .execute('getAddressAndLast4Card');
+    if (result.recordset.length > 0) {
+        res.end(JSON.stringify({ success: true, items: result.recordset }))
+    } else {
+        res.end(JSON.stringify({ success: false, result: 'Empty'}))
+    }
+})
+
 router.get('/cart', async(req, res, next) => {
     console.log('entering cart query');
     console.log('req.query', req.query);
@@ -150,8 +164,6 @@ router.delete('/cart', async (req, res, next) => {
 });
 
 router.get('/user', async(req, res, next) => {
-    // req.query.username // put this into DB call
-    // req.query.password // put this into DB call
     console.log(req)
 ;    const pool = await poolPromise;
     const query = await pool.request()
