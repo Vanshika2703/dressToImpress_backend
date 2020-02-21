@@ -58,8 +58,6 @@ router.post('/item', async (req, res, next) => {
     }
 });
 
-<<<<<<< HEAD
-=======
 router.post('/user/profile/cardModal', async (req, res, next) => {
     console.log('Card stuff is being updated')
     const pool = await poolPromise;
@@ -93,7 +91,6 @@ router.post('/user/profile/addrModal', async (req, res, next) => {
     }
 });
 
->>>>>>> 979f177228ad8cd5fe9ee26a9429139476b0ff48
 router.get('/items', async(req, res, next) => {
     const pool = await poolPromise;
     const query = await pool.request()
