@@ -9,6 +9,11 @@ router.post('/user', async (req, res, next) => {
     const pword = req.body.password;
     var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync(pword, salt);
+
+    const cvv = req.body.cvv;
+    var saltcvv = bcrypt.genSaltSync(10);
+    var hashcvv = bcrypt.hashSync(cvv, saltcvv);
+
     console.log('hash :', hash);
     const pool = await poolPromise;
     const query = await pool.request()
@@ -22,9 +27,9 @@ router.post('/user', async (req, res, next) => {
                         .input('City', sql.VarChar(30), req.body.city)
                         .input('AddrState',sql.VarChar(2),req.body.state)
                         .input('Zipcode',sql.Int,req.body.zip)
-                        .input('CardNumber',sql.Int,req.body.cardnumber)
+                        .input('CardNumber',sql.BigInt,req.body.cardnumber)
                         .input('ExpiryDate',sql.Date,req.body.expirydate)
-                        .input('cvv',sql.Int,req.body.cvv)
+                        .input('cvv',sql.VarChar(100), hashcvv)
                         .execute('insert_User');
 
     console.log('query', query);
@@ -52,9 +57,9 @@ router.post('/item', async (req, res, next) => {
                         .input('Description', sql.VarChar(80), req.body.Description)
                         .input('Display', sql.VarChar(1000), req.body.Display)
                         .execute('insert_Item');
-     if (query.returnValue == 0) {
+    if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true, items: query.recordset }))
-     } else {
+    } else {
         res.end(JSON.stringify({ success: false, result: 'Empty'}))
     }
 });
@@ -67,9 +72,9 @@ router.post('/user/profile/cardModal', async (req, res, next) => {
                         .input('number', sql.Int, req.body.Number)
                         .input('date', sql.Date, req.body.date)
                         .execute('updateCard');
-     if (query.returnValue == 0) {
+    if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true, items: query.recordset }))
-     } else {
+    } else {
         res.end(JSON.stringify({ success: false, result: 'Empty'}))
     }
 });
@@ -85,9 +90,9 @@ router.post('/user/profile/addrModal', async (req, res, next) => {
                         .input('state', sql.VarChar(80), req.body.State)
                         .input('zip', sql.Int, req.body.ZipCode)
                         .execute('updateAddress');
-     if (query.returnValue == 0) {
+    if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true, items: query.recordset}))
-     } else {
+    } else {
         res.end(JSON.stringify({ success: false, result: 'Empty'}))
     }
 });
