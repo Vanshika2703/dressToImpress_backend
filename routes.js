@@ -20,6 +20,7 @@ router.post('/user', async (req, res, next) => {
                         .input('Zipcode',sql.Int,req.body.zip)
                         .input('CardNumber',sql.Int,req.body.cardnumber)
                         .input('ExpiryDate',sql.Date,req.body.expirydate)
+                        .input('cvv',sql.Int,req.body.cvv)
                         .execute('insert_User');
     if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true,  number: 0}))
