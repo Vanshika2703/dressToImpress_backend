@@ -99,6 +99,7 @@ router.post('/user/profile/addrModal', async (req, res, next) => {
     if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true, items: query.recordset}))
     } else {
+        console.log('query.returnValue :', query.returnValue);
         res.end(JSON.stringify({ success: false, result: 'Empty'}))
     }
 });
@@ -124,7 +125,7 @@ router.get('/user/profile', async(req, res, next) => {
                         .execute('getAddressAndLast4Card');
                         console.log(result)
     if (result.recordset.length > 0) {
-        res.end(JSON.stringify({ success: true, items: result.recordset, cardend: result.returnValue }))
+        res.end(JSON.stringify({ success: true, items: result.recordsets[0], cardend: result.returnValue, orders: result.recordsets[1] }))
     } else {
         res.end(JSON.stringify({ success: false, result: 'Empty'}))
     }
