@@ -138,7 +138,7 @@ router.get('/item/sorted', async(req, res, next) => {
     const query = await pool.request()
         .input('Color', sql.VarChar(20), req.query.Color)
         .input('ItemType', sql.VarChar(50), req.query.ItemType)
-        .input('Cost', sql.Money, req.query.Cost)
+        .input('Cost', sql.VarChar(20), req.query.Cost)
         .execute('getItemsorted');
         if (query.returnValue == 0) 
         {
