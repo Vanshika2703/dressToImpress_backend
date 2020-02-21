@@ -20,7 +20,6 @@ router.post('/user', async (req, res, next) => {
                         .input('Zipcode',sql.Int,req.body.zip)
                         .input('CardNumber',sql.Int,req.body.cardnumber)
                         .input('ExpiryDate',sql.Date,req.body.expirydate)
-
                         .execute('insert_User');
      if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true,  number: 0}))
@@ -68,10 +67,11 @@ router.get('/user/profile', async(req, res, next) => {
     console.log('req.query', req.query);
     const pool = await poolPromise;
     const result = await pool.request()
-                        .input('Username', sql.VarChar(20), req.query.username)
+                        .input('userName', sql.VarChar(20), req.query.username)
                         .execute('getAddressAndLast4Card');
+                        console.log(result)
     if (result.recordset.length > 0) {
-        res.end(JSON.stringify({ success: true, items: result.recordset }))
+        res.end(JSON.stringify({ success: true, items: result.recordset, cardend: result.returnValue }))
     } else {
         res.end(JSON.stringify({ success: false, result: 'Empty'}))
     }
