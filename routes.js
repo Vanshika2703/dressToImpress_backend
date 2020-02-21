@@ -75,8 +75,9 @@ router.post('/user/profile/cardModal', async (req, res, next) => {
     const pool = await poolPromise;
     const query = await pool.request()
                         .input('username', sql.VarChar(20), req.body.username)
-                        .input('number', sql.Int, req.body.Number)
-                        .input('date', sql.Date, req.body.date)
+                        .input('number', sql.BigInt, req.body.Number)
+                        .input('date', sql.Date, req.body.Date)
+                        .input('cvv', sql.Int, req.body.CVV)
                         .execute('updateCard');
     if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true, items: query.recordset }))
