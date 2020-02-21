@@ -64,7 +64,7 @@ router.post('/user/profile/cardModal', async (req, res, next) => {
     }
 });
 
-router.post('/user/profile/addrModal', async (req, res, next) => {
+router.post('/api/user/profile/addrModal', async (req, res, next) => {
     console.log('address is being updated')
     const pool = await poolPromise;
     const query = await pool.request()
