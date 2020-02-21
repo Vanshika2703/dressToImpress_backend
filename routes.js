@@ -58,6 +58,42 @@ router.post('/item', async (req, res, next) => {
     }
 });
 
+<<<<<<< HEAD
+=======
+router.post('/user/profile/cardModal', async (req, res, next) => {
+    console.log('Card stuff is being updated')
+    const pool = await poolPromise;
+    const query = await pool.request()
+                        .input('username', sql.VarChar(20), req.body.username)
+                        .input('number', sql.Int, req.body.Number)
+                        .input('date', sql.Date, req.body.date)
+                        .execute('updateCard');
+     if (query.returnValue == 0) {
+        res.end(JSON.stringify({ success: true, items: query.recordset }))
+     } else {
+        res.end(JSON.stringify({ success: false, result: 'Empty'}))
+    }
+});
+
+router.post('/user/profile/addrModal', async (req, res, next) => {
+    console.log('address is being updated')
+    const pool = await poolPromise;
+    const query = await pool.request()
+                        .input('username', sql.VarChar(20), req.body.username)
+                        .input('number', sql.Int, req.body.Number)
+                        .input('street', sql.VarChar(50), req.body.Street)
+                        .input('city', sql.VarChar(2), req.body.City)
+                        .input('state', sql.VarChar(80), req.body.State)
+                        .input('zip', sql.Int, req.body.ZipCode)
+                        .execute('updateAddress');
+     if (query.returnValue == 0) {
+        res.end(JSON.stringify({ success: true, items: query.recordset}))
+     } else {
+        res.end(JSON.stringify({ success: false, result: 'Empty'}))
+    }
+});
+
+>>>>>>> 979f177228ad8cd5fe9ee26a9429139476b0ff48
 router.get('/items', async(req, res, next) => {
     const pool = await poolPromise;
     const query = await pool.request()
