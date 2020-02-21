@@ -6,10 +6,14 @@ const {sql, poolPromise} = require('./config');
 
 router.post('/user', async (req, res, next) => {
     console.log('User is being registered')
+    const pword = req.body.password;
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(pword, salt);
+    console.log('hash :', hash);
     const pool = await poolPromise;
     const query = await pool.request()
                         .input('Username', sql.VarChar(20), req.body.username)
-                        .input('Password', sql.VarChar(25), req.body.password)
+                        .input('Password', sql.VarChar(100), hash)
                         .input('Fname', sql.VarChar(20), req.body.fname)
                         .input('Lname', sql.VarChar(30), req.body.lname)
                         .input('DOB', sql.Date, req.body.dob)
@@ -22,6 +26,10 @@ router.post('/user', async (req, res, next) => {
                         .input('ExpiryDate',sql.Date,req.body.expirydate)
                         .input('cvv',sql.Int,req.body.cvv)
                         .execute('insert_User');
+
+    console.log('query', query);
+    console.log('query.returnValue :', query.returnValue);
+
     if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true,  number: 0}))
     } else if (query.returnValue == 1){
@@ -51,6 +59,8 @@ router.post('/item', async (req, res, next) => {
     }
 });
 
+<<<<<<< HEAD
+=======
 router.post('/user/profile/cardModal', async (req, res, next) => {
     console.log('Card stuff is being updated')
     const pool = await poolPromise;
@@ -84,6 +94,7 @@ router.post('/user/profile/addrModal', async (req, res, next) => {
     }
 });
 
+>>>>>>> 979f177228ad8cd5fe9ee26a9429139476b0ff48
 router.get('/items', async(req, res, next) => {
     const pool = await poolPromise;
     const query = await pool.request()
@@ -103,10 +114,9 @@ router.get('/user/profile', async(req, res, next) => {
     const result = await pool.request()
                         .input('userName', sql.VarChar(20), req.query.username)
                         .execute('getAddressAndLast4Card');
-                        console.log(result.recordsets[0])
-                        console.log(result.recordsets[1])
+                        console.log(result)
     if (result.recordset.length > 0) {
-        res.end(JSON.stringify({ success: true, items: result.recordsets[0], cardend: result.returnValue, orders:result.recordsets[1] }))
+        res.end(JSON.stringify({ success: true, items: result.recordset, cardend: result.returnValue }))
     } else {
         res.end(JSON.stringify({ success: false, result: 'Empty'}))
     }
@@ -199,28 +209,30 @@ router.delete('/cart', async (req, res, next) => {
 });
 
 router.get('/user', async(req, res, next) => {
-    console.log(req)
-;    const pool = await poolPromise;
-    const query = await pool.request()
+    console.log('logging in a user')
+    const pool = await poolPromise;
+    const result = await pool.request()
             .input('Username', sql.VarChar(20), req.query.username)
-            .input('UserPassword', sql.VarChar(25), req.query.password)
-            .execute('CheckLogin');
-            
-    console.log(query);
-    if (query.returnValue == 1 ) 
+            .input('UserPassword', sql.VarChar(100), req.query.password)
+            .query('SELECT * FROM [dbo].[loginUser] (@Username , @UserPassword)')
+    if(result.recordset.length > 0)
     {
-        console.log(query.returnValue)
-        res.end(JSON.stringify({ success: true, number: 1, username: req.query.username }))
+        // console.log('result.recordset :', result.recordset[0].Username);
+        const hashpassword = result.recordset[0].UserPassword;
+        delete result.recordset[0].UserPassword;
+        bcrypt.compare(req.query.password, hashpassword, function(err, resu) {
+            if (resu == true) {
+                // console.log('username :', result.recordset);
+                res.end(JSON.stringify({ success: true, user: result.recordset[0].Username }));
+            } else {
+                res.end(JSON.stringify({ success: false}))
+            }
+        })
     } 
-    else if (query.returnValue == 2)
+    else
     {
-        console.log(query.returnValue)
-        res.end(JSON.stringify({ success: true, items: query.recordset, number: 2 }))
+        res.end(JSON.stringify({ success: false }))
     }
-    else 
-    {
-        console.log(query.returnValue)
-        res.end(JSON.stringify({ success: false, result: 'Empty', number: 0}))
-    }
+
 })
 module.exports = router;
