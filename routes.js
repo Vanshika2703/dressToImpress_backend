@@ -1,6 +1,6 @@
-console.log("Entered the top")
-var express = require('express');
-var router = express.Router();
+const bcrypt = require('bcrypt');
+const express = require('express');
+const router = express.Router();
 
 const {sql, poolPromise} = require('./config');
 
@@ -21,9 +21,9 @@ router.post('/user', async (req, res, next) => {
                         .input('CardNumber',sql.Int,req.body.cardnumber)
                         .input('ExpiryDate',sql.Date,req.body.expirydate)
                         .execute('insert_User');
-     if (query.returnValue == 0) {
+    if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true,  number: 0}))
-     } else if (query.returnValue == 1){
+    } else if (query.returnValue == 1){
         res.end(JSON.stringify({ success: false, number: 1}))
     }
     else if (query.returnValue == 2)
