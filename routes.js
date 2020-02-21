@@ -54,9 +54,10 @@ router.post('/user/profile/cardModal', async (req, res, next) => {
     console.log('Card stuff is being updated')
     const pool = await poolPromise;
     const query = await pool.request()
-                        .input('Color', sql.VarChar(20), req.body.Color)
-                        .input('Display', sql.VarChar(1000), req.body.Display)
-                        .execute('insert_Item');
+                        .input('username', sql.VarChar(20), req.body.username)
+                        .input('number', sql.Int, req.body.Number)
+                        .input('date', sql.Date, req.body.date)
+                        .execute('updateCard');
      if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true, items: query.recordset }))
      } else {
@@ -64,16 +65,16 @@ router.post('/user/profile/cardModal', async (req, res, next) => {
     }
 });
 
-router.post('/api/user/profile/addrModal', async (req, res, next) => {
+router.post('/user/profile/addrModal', async (req, res, next) => {
     console.log('address is being updated')
     const pool = await poolPromise;
     const query = await pool.request()
-                        .input('Username', sql.VarChar(20), req.body.username)
-                        .input('Number', sql.Int, req.body.Number)
-                        .input('Street', sql.VarChar(50), req.body.Street)
-                        .input('City', sql.VarChar(2), req.body.City)
-                        .input('AddrState', sql.VarChar(80), req.body.State)
-                        .input('Zipcode', sql.Int, req.body.ZipCode)
+                        .input('username', sql.VarChar(20), req.body.username)
+                        .input('number', sql.Int, req.body.Number)
+                        .input('street', sql.VarChar(50), req.body.Street)
+                        .input('city', sql.VarChar(2), req.body.City)
+                        .input('state', sql.VarChar(80), req.body.State)
+                        .input('zip', sql.Int, req.body.ZipCode)
                         .execute('updateAddress');
      if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true, items: query.recordset}))
