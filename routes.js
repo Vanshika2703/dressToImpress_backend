@@ -24,6 +24,7 @@ router.post('/user', async (req, res, next) => {
                         .input('Zipcode',sql.Int,req.body.zip)
                         .input('CardNumber',sql.Int,req.body.cardnumber)
                         .input('ExpiryDate',sql.Date,req.body.expirydate)
+                        .input('cvv',sql.Int,req.body.cvv)
                         .execute('insert_User');
 
     console.log('query', query);
