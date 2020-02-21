@@ -59,8 +59,14 @@ router.post('/item', async (req, res, next) => {
                         .execute('insert_Item');
     if (query.returnValue == 0) {
         res.end(JSON.stringify({ success: true, items: query.recordset }))
-    } else {
-        res.end(JSON.stringify({ success: false, result: 'Empty'}))
+    } 
+    else if(query.returnValue == 1)
+    {
+        res.end(JSON.stringify({ success: false, result: 'Empty', number: 1}))
+    }
+    else(query.returnValue == 2)
+    {
+        res.end(JSON.stringify({ success: false, result: 'Empty', number: 2}))
     }
 });
 
